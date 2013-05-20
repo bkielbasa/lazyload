@@ -1,36 +1,38 @@
 var lazy_loading = new function() {
-  this.update = function() {
-		lazy_loading.lazy_load_images();
-		lazy_loading.lazy_load_youtube();
-	},
-	
+    this.update = function() {
+        lazy_loading.lazy_load_images();
+        lazy_loading.lazy_load_youtube();
+    },
+    
     this.lazy_load_images = function() 
     {
-    	jQuery.each(jQuery('a.lazyload'), function(index, image){
-    		if (!lazy_loading.is_on_the_screen(image)) {
-    			return;
-    		}
-    		
-    		image = jQuery(image);
-    		image.attr('src', image.attr('data-src'));
-    	});
+        jQuery.each(jQuery('a.lazyload'), function(index, image){
+            if (!lazy_loading.is_on_the_screen(image)) {
+                return;
+            }
+            
+            image = jQuery(image);
+            image.attr('src', image.attr('data-src'));
+        });
     },
     
     this.lazy_load_youtube = function()
     {
-    	jQuery.each(jQuery('a.lazyload-youtube'), function(index, image){
-    		if (!lazy_loading.is_on_the_screen(image)) {
-    			return;
-    		}
-    		
-    		var embedparms = jQuery(this).attr("href").split("?v=")[1].replace(/\&/,'?');
-    		var emu = 'http://www.youtube.com/embed/'+embedparms;
-    	    var youtube_id = embedparms.split("?")[0];
-    		
-    		var html = '<iframe width="" height="" src=' + emu + '  frameborder="0" allowfullscreen></iframe>';
-    	    
-    		jQuery(this).replaceWith(html);
-    	});
+        jQuery.each(jQuery('a.lazyload-youtube'), function(index, image){
+            if (!lazy_loading.is_on_the_screen(image)) {
+                return;
+            }
+            
+            var embedparms = jQuery(this).attr("href").split("?v=")[1].replace(/\&/,'?');
+            var emu = 'http://www.youtube.com/embed/'+embedparms;
+            var youtube_id = embedparms.split("?")[0];
+            var width   = jQuery(this).attr('data-width');
+            var heigth  = jQuery(this).attr('data-heigth');
+            
+            var html = '<iframe width="' + width + '" height="' + heigth + '" src=' + emu + '  frameborder="0" allowfullscreen></iframe>';
+            
+            jQuery(this).replaceWith(html);
+        });
     }
     
     this.is_on_the_screen = function(elem)
@@ -46,6 +48,6 @@ var lazy_loading = new function() {
 }
 
 jQuery(document).ready(function(){
-	jQuery(document).scroll(lazy_loading.update);
-	lazy_loading.update();
+    jQuery(document).scroll(lazy_loading.update);
+    lazy_loading.update();
 });
